@@ -1,0 +1,9 @@
+<library path="../../lib/libsliders_rviz_panel">
+  <class name="cartesio_gui/Sliders"
+         type="SlidersRvizPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      Rviz panel to enable runtime customization of postural tasks.
+    </description>
+  </class>
+</library>

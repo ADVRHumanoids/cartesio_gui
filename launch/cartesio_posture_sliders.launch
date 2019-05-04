@@ -1,0 +1,22 @@
+<launch>
+
+<arg name="ns" default="/"/>
+
+<group ns="$(arg ns)">
+
+    <node pkg="cartesio_gui" type="joint_state_sliders" 
+                            name="cartesio_posture_sliders" 
+                            required="true" 
+                            output="screen">
+                                            
+        <param name="message_type" value="sensor_msgs"/>
+        <param name="enable_velocity_tab" value="false"/>
+        <param name="enable_effort_tab" value="false"/>
+        <remap from="joint_states" to="cartesian/posture/state"/>
+        <remap from="command" to="cartesian/posture/reference"/>
+        
+    </node>
+
+</group>
+
+</launch>

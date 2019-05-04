@@ -1,0 +1,18 @@
+<launch>
+
+<arg name="ns" default="xbotcore"/>
+
+<group ns="$(arg ns)">
+
+    <node pkg="cartesio_gui" type="joint_state_sliders" 
+                            name="xbot_joint_command_sliders" 
+                            required="true" 
+                            output="screen">
+                                            
+        <param name="message_type" value="xbot_msgs"/>
+        
+    </node>
+
+</group>
+
+</launch>
