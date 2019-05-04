@@ -11,4 +11,6 @@ Two ready-to-use launch files available:
  - `cartesio_posture_sliders.launch`, to use the gui to control a postural task in CartesI/O
  - `xbot_joint_command_sliders.launch`, to control a XBotCore-powered robot in joint space
  
+[![](http://img.youtube.com/vi/KzetA9NdyXE/0.jpg)](http://www.youtube.com/watch?v=KzetA9NdyXE "")
+ 
 Also check out the [**rosmon**](http://wiki.ros.org/rosmon) utility, which is a smarter roslaunch!
