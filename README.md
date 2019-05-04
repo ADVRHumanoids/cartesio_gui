@@ -10,3 +10,5 @@ Load it from RViz->Panels->Add New Panel
 Two ready-to-use launch files available:
  - `cartesio_posture_sliders.launch`, to use the gui to control a postural task in CartesI/O
  - `xbot_joint_command_sliders.launch`, to control a XBotCore-powered robot in joint space
+ 
+Also check out the [**rosmon**](http://wiki.ros.org/rosmon) utility, which is a smarter roslaunch!
