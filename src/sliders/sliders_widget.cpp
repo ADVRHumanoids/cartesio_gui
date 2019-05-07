@@ -200,6 +200,11 @@ void SlidersWidget::handle_locked_joints(int i, double value)
 {
     auto wi = _widget_vec.at(i);
     
+    if(std::fabs(wi.locked_value) < 0.1)
+    {
+        return;
+    }
+    
     for(int j = 0; j < _widget_vec.size(); j++)
     {
         if(i == j)

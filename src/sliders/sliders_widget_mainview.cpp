@@ -366,7 +366,7 @@ void cartesio_gui::SlidersWidgetMainView::construct()
     // construct all widgets 
     for(auto ch : _robot->getChainNames())
     {
-        Eigen::VectorXd zero, q, k, d, qmin, qmax, qdotmax, taumax;
+        Eigen::VectorXd zero, ones, q, k, d, qmin, qmax, qdotmax, taumax;
         _robot->getChainMap().at(ch)->getJointLimits(qmin, qmax);
         _robot->getChainMap().at(ch)->getVelocityLimits(qdotmax);
         _robot->getChainMap().at(ch)->getEffortLimits(taumax);
@@ -374,6 +374,7 @@ void cartesio_gui::SlidersWidgetMainView::construct()
         _robot->getChainMap().at(ch)->getStiffness(k);
         _robot->getChainMap().at(ch)->getDamping(d);
         zero.setZero(q.size());
+        ones.setOnes(q.size());
         auto j_list = _robot->getChainMap().at(ch)->getJointNames();
 
         auto * tab_wid = new QTabWidget;
@@ -406,6 +407,7 @@ void cartesio_gui::SlidersWidgetMainView::construct()
 
         auto * k_wid = new cartesio_gui::SlidersWidget(ch, j_list);
         k_wid->setInitialValue(::eigen_to_std(k));
+        k_wid->setRange(::eigen_to_std(zero), ::eigen_to_std(ones * 2000));
         k_wid->setCallback(std::bind(&SlidersWidgetMainView::k_callback,
                                      this,
                                      pl::_1, pl::_2));
@@ -414,6 +416,7 @@ void cartesio_gui::SlidersWidgetMainView::construct()
 
         auto * d_wid = new cartesio_gui::SlidersWidget(ch, j_list);
         d_wid->setInitialValue(::eigen_to_std(d));
+        d_wid->setRange(::eigen_to_std(zero), ::eigen_to_std(ones * 100));
         d_wid->setCallback(std::bind(&SlidersWidgetMainView::d_callback,
                                      this,
                                      pl::_1, pl::_2));
