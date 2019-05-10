@@ -4,9 +4,17 @@ project(cartesio_gui)
 add_compile_options(-std=c++14)
 add_definitions(-DXBOT_MSGS_SUPPORT)
 
+set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-find_package(Qt5Widgets CONFIG REQUIRED)
-find_package(Qt5UiTools CONFIG REQUIRED)
+set(MINIMUM_QT_VERSION 5.9)
+set(QT_PATH $ENV{CARTESIO_GUI_QT_PATH})
+
+message(STATUS "Searching QT in '${QT_PATH}'")
+
+list(APPEND CMAKE_PREFIX_PATH ${QT_PATH})
+find_package(Qt5UiTools ${MINIMUM_QT_VERSION} REQUIRED)
+find_package(Qt5Widgets ${MINIMUM_QT_VERSION} REQUIRED)
+find_package(Qt5Quick ${MINIMUM_QT_VERSION} REQUIRED)
 find_package(catkin REQUIRED COMPONENTS cartesian_interface rviz)
 find_package(XBotInterface REQUIRED)
 
@@ -16,6 +24,7 @@ include_directories(include/ ${Qt5Widgets_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
 
 include(src/cartesio/cartesio.cmake)
 include(src/sliders/sliders.cmake)
+include(src/joy_gui/joy_gui.cmake)
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 install(DIRECTORY launch/

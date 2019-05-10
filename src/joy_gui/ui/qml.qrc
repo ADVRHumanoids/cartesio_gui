@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>VelocityBar.qml</file>
+        <file>VelocityBarForm.ui.qml</file>
+        <file>SignedBar.qml</file>
+        <file>SignedBarForm.ui.qml</file>
+        <file>VelocityBar6D.qml</file>
+        <file>VelocityBar6DForm.ui.qml</file>
+        <file>TaskPage.qml</file>
+        <file>TaskPageForm.ui.qml</file>
+        <file>DoubleSpinbox2.qml</file>
+        <file>UpperPanel.qml</file>
+        <file>UpperPanelForm.ui.qml</file>
+        <file>LowerPanel.qml</file>
+        <file>LowerPanelForm.ui.qml</file>
+    </qresource>
+</RCC>
