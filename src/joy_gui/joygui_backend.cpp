@@ -48,7 +48,21 @@ QStringList JoyGuiBackEnd::getTasks()
 QStringList JoyGuiBackEnd::getLinks()
 {
     std::string urdf;
-    ros::NodeHandle().getParam("model_description/robot_description", urdf);
+    
+    ros::NodeHandle nh_base;
+    if(nh_base.hasParam("model_description/robot_description"))
+    {
+        nh_base.getParam("model_description/robot_description", urdf);
+    }
+    else if(nh_base.hasParam("robot_description"))
+    {
+        nh_base.getParam("robot_description", urdf);
+    }
+    else
+    {
+        throw std::runtime_error("Unable to get 'robot_description' parameter");
+    }
+    
     auto urdfdom = urdf::parseURDF(urdf);
 
     std::vector<urdf::LinkSharedPtr> link_vec;
