@@ -15,5 +15,9 @@
         <file>UpperPanelForm.ui.qml</file>
         <file>LowerPanel.qml</file>
         <file>LowerPanelForm.ui.qml</file>
+        <file>../pics/worker.svg</file>
+        <file>BackEndComponent.qml</file>
+        <file>TaskTabBarForm.ui.qml</file>
+        <file>TaskTabBar.qml</file>
     </qresource>
 </RCC>

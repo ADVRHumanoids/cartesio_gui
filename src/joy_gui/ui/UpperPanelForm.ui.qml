@@ -6,6 +6,9 @@ import joygui.backend 1.0
 
 Page {
 
+    implicitWidth: 640
+    implicitHeight: 460
+
     header: Label {
         id: page_label
         text: qsTr("Joystick output")
@@ -13,32 +16,87 @@ Page {
         padding: 10
     }
 
-    id: frame
-    width: 200
-    height: 200
-    Layout.preferredHeight: 310
-    Layout.fillHeight: false
-    Layout.fillWidth: true
-    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+    id: upperPanelPage
 
-    GroupBox {
+    property alias spinboxLinear: spinboxLinear
+    property alias spinboxAngular: spinboxAngular
+    property alias vbars: vbars
 
-        id: groupBox
+    Grid {
+        id: grid1
+        spacing: 10
 
-        x: 20
-        y: 0
-        width: 295
-        height: 263
-        contentWidth: vbars.width
-        contentHeight: vbars.height
-        title: "Output level"
+        anchors.rightMargin: 10
+        anchors.leftMargin: 10
+        anchors.fill: parent
 
-        VelocityBar6D {
-            id: vbars
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 0
+        rows: 2
+        columns: 2
+
+        /* Velocity bars */
+        GroupBox {
+
+            id: vbarsGroupBox
+            title: "Velocity command"
+
+            VelocityBar6D {
+                id: vbars
+            }
+        }
+
+        /* Mistery item */
+        GroupBox {
+
+            title: "Mistery box"
+
+            Image {
+                id: wipImage
+                sourceSize.height: 200
+                sourceSize.width: 280
+                source: "../pics/worker.svg"
+            }
+        }
+
+        /* Speed limits */
+        GroupBox {
+
+            title: "Speed limits"
+            width: vbarsGroupBox.width
+
+            GridLayout {
+                id: grid
+                columnSpacing: 13
+                rows: 2
+                columns: 2
+
+                Label {
+                    id: label
+                    text: "Max linear speed"
+                }
+
+                DoubleSpinbox2 {
+                    id: spinboxLinear
+                    wrap: false
+                    editable: false
+                    from: 0.0
+                    to: 1.0
+                    stepSize: 0.1
+                }
+
+                Label {
+                    id: label1
+                    text: "Max angular speed"
+                }
+
+                DoubleSpinbox2 {
+                    id: spinboxAngular
+                    editable: false
+                    wrap: false
+                    from: 0.0
+                    to: 1.0
+                    stepSize: 0.1
+                }
+            }
         }
     }
 }

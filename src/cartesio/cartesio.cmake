@@ -5,6 +5,7 @@ add_library(cartesio_rviz_panel SHARED
     src/cartesio/task_options_widget.cpp)
 
 target_link_libraries(cartesio_rviz_panel Qt5::Widgets ${catkin_LIBRARIES})
+set_target_properties(cartesio_rviz_panel PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 install(TARGETS cartesio_rviz_panel
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

@@ -11,6 +11,9 @@ target_link_libraries(sliders_widget PUBLIC
                         Qt5::UiTools
                         ${catkin_LIBRARIES}
                         XBotInterface::XBotInterface)
+
+set_target_properties(sliders_widget PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+
                          
 install(TARGETS sliders_widget
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -23,6 +26,8 @@ add_executable(joint_state_sliders src/sliders/sliders_widget_main.cpp)
                                 
 target_link_libraries(joint_state_sliders PRIVATE 
                         sliders_widget)
+
+set_target_properties(joint_state_sliders PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 install(TARGETS joint_state_sliders
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

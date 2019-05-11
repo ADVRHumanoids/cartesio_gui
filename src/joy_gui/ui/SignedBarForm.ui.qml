@@ -24,7 +24,7 @@ Item {
         id: border_rect
         color: "#00000000"
         border.width: 1
-        z: -1
+        z: 2
         anchors.fill: parent
     }
 

@@ -27,27 +27,9 @@ TaskPageForm {
         }
     }
 
-    spinboxLinear.onValueChanged:
-    {
-        vbars.set_max_linear_speed(spinboxLinear.value)
 
-        if(backend.send_service)
-        {
-            backend.setMaxLinearSpeed(spinboxLinear.value)
-        }
-    }
 
-    spinboxAngular.onValueChanged:
-    {
-        vbars.set_max_angular_speed(spinboxAngular.value)
-
-        if(backend.send_service)
-        {
-            backend.setMaxAngularSpeed(spinboxAngular.value)
-        }
-    }
-
-    radioButtonGlobal.onCheckedChanged:
+    radioButtonGlobal.onToggled:
     {
         if(backend.send_service)
         {
@@ -55,7 +37,7 @@ TaskPageForm {
         }
     }
 
-    radioButtonLocal.onCheckedChanged:
+    radioButtonLocal.onToggled:
     {
         if(backend.send_service)
         {
@@ -63,7 +45,7 @@ TaskPageForm {
         }
     }
 
-    radioButtonBaseLink.onCheckedChanged:
+    radioButtonBaseLink.onToggled:
     {
         if(backend.send_service)
         {

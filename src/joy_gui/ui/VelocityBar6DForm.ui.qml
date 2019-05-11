@@ -3,8 +3,10 @@ import QtQuick 2.4
 Item {
 
     id: element
-    width: 280
-    height: 220
+    implicitHeight: 220
+    implicitWidth: 280
+    //    width: 280
+    //    height: 220
     property alias bar_yaw: bar_yaw
     property alias bar_p: bar_p
     property alias bar_r: bar_r

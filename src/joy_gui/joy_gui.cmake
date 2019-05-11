@@ -9,3 +9,10 @@ add_executable(joy_gui src/joy_gui/main.cpp
 target_compile_definitions(joy_gui PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(joy_gui PRIVATE Qt5::Core Qt5::Quick ${catkin_LIBRARIES})
 target_include_directories(joy_gui PRIVATE ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} src/joy_gui)
+set_target_properties(joy_gui PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE) # REQUIRED TO FIND CUSTOM QT VIA RPATH ON INSTALLED EXEC!!!
+
+install(TARGETS joy_gui
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
