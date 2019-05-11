@@ -5,6 +5,8 @@
 
 int main(int argc, char *argv[])
 {
+    ros::init(argc, argv, "joy_gui_node");
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);

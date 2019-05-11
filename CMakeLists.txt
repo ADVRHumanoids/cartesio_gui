@@ -7,11 +7,16 @@ add_definitions(-DXBOT_MSGS_SUPPORT)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(MINIMUM_QT_VERSION 5.9)
-set(QT_PATH $ENV{CARTESIO_GUI_QT_PATH})
 
+## Get custom path to QT from env
+set(QT_PATH $ENV{CARTESIO_GUI_QT_PATH})
 message(STATUS "Searching QT in '${QT_PATH}'")
 
+# Get CMAKE_PREFIX_PATH from environment, and append QT_PATH
+set(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
+string(REPLACE ":" ";" CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH})
 list(APPEND CMAKE_PREFIX_PATH ${QT_PATH})
+
 find_package(Qt5UiTools ${MINIMUM_QT_VERSION} REQUIRED)
 find_package(Qt5Widgets ${MINIMUM_QT_VERSION} REQUIRED)
 find_package(Qt5Quick ${MINIMUM_QT_VERSION} REQUIRED)
@@ -20,7 +25,8 @@ find_package(XBotInterface REQUIRED)
 
 catkin_package()
 
-include_directories(include/ ${Qt5Widgets_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
+include_directories(include/
+                    ${catkin_INCLUDE_DIRS})
 
 include(src/cartesio/cartesio.cmake)
 include(src/sliders/sliders.cmake)

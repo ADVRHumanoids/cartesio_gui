@@ -143,17 +143,17 @@ void JoyGuiBackEnd::setEnabledAxis(int idx, bool enabled)
 
 qreal JoyGuiBackEnd::getMaxLinearSpeed() const
 {
-    return _joy_map.at(_active_task.toStdString()).max_linear;
+    return _max_linear;
 }
 
 qreal JoyGuiBackEnd::getMaxAngularSpeed() const
 {
-    return _joy_map.at(_active_task.toStdString()).max_angular;
+    return _max_angular;
 }
 
 void JoyGuiBackEnd::setMaxLinearSpeed(qreal vel)
 {
-    _joy_map.at(_active_task.toStdString()).max_linear = vel;
+    _max_linear = vel;
 
     cartesian_interface::SetJoystickTaskMaxSpeed srv;
     srv.request.max_linear_speed = vel;
@@ -167,7 +167,7 @@ void JoyGuiBackEnd::setMaxLinearSpeed(qreal vel)
 
 void JoyGuiBackEnd::setMaxAngularSpeed(qreal vel)
 {
-    _joy_map.at(_active_task.toStdString()).max_angular = vel;
+    _max_angular = vel;
 
     cartesian_interface::SetJoystickTaskMaxSpeed srv;
     srv.request.max_linear_speed = getMaxLinearSpeed();
@@ -281,17 +281,14 @@ void JoyGuiBackEnd::on_joy_status_recv(const cartesian_interface::JoystickStatus
         setActiveTask(QString::fromStdString(msg->active_task));
     }
 
-    _joy_map.at(_active_task.toStdString()).max_linear = msg->max_linear_speed;
-    _joy_map.at(_active_task.toStdString()).max_angular = msg->max_angular_speed;
+    _max_linear = msg->max_linear_speed;
+    _max_angular = msg->max_angular_speed;
 
     emit joyStatusReceived();
 
 }
 
-JoyGuiBackEnd::JoyData::JoyData():
-    max_linear(0.0),
-    max_angular(0.0),
-    ref_frame("")
+JoyGuiBackEnd::JoyData::JoyData()
 {
 
 }

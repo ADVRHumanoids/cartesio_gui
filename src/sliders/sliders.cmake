@@ -3,7 +3,7 @@
 add_library(sliders_widget SHARED 
     src/sliders/sliders_widget_mainview.cpp
     src/sliders/sliders_widget.cpp
-    resources.qrc
+    src/sliders/resources.qrc
     )
     
 target_link_libraries(sliders_widget PUBLIC 

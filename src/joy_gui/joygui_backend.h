@@ -61,27 +61,30 @@ public slots:
 
 private:
 
-    void on_twist_recv(const geometry_msgs::TwistStampedConstPtr& msg, std::string task_id);
-    void on_joy_status_recv(const cartesian_interface::JoystickStatusConstPtr& msg);
-
-    typedef Eigen::Matrix<int, 6, 1> Vector6i;
-
     struct JoyData
     {
         ros::Subscriber twist_sub;
-        double max_linear, max_angular;
         QString ref_frame;
 
         JoyData();
     };
 
+    typedef Eigen::Matrix<int, 6, 1> Vector6i;
+
+    void on_twist_recv(const geometry_msgs::TwistStampedConstPtr& msg, std::string task_id);
+    void on_joy_status_recv(const cartesian_interface::JoystickStatusConstPtr& msg);
+
     XBot::Cartesian::RosImpl _ci;
     ros::NodeHandle _nh;
+
     ros::Subscriber _status_sub;
+
     std::map<std::string, JoyData> _joy_map;
     Vector6i _enabled_axis;
+    double _max_linear, _max_angular;
 
     QString _active_task;
+
     ros::Time _twist_recv_stamp;
     QVector<qreal> _twist;
 };
