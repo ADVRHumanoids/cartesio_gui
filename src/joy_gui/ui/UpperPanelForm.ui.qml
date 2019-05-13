@@ -21,6 +21,7 @@ Page {
     property alias spinboxLinear: spinboxLinear
     property alias spinboxAngular: spinboxAngular
     property alias vbars: vbars
+    property alias reloadButton: reloadButton
 
     Grid {
         id: grid1
@@ -97,6 +98,12 @@ Page {
                     stepSize: 0.1
                 }
             }
+        }
+
+        DelayButton {
+            id: reloadButton
+            text: "Restart"
+            delay: 3000
         }
     }
 }

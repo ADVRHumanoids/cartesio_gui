@@ -8,7 +8,10 @@ LowerPanelForm {
 
     function loadSwipeViewPages()
     {
-        swipeView.removeItem(swipeView.currentItem)
+        while(swipeView.count > 0)
+        {
+            swipeView.removeItem(swipeView.currentItem)
+        }
 
         console.info("Loading swipe view pages..")
 

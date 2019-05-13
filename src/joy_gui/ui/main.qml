@@ -44,29 +44,6 @@ ApplicationWindow {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*##^## Designer {
     D{i:0;height:700;width:640}
 }

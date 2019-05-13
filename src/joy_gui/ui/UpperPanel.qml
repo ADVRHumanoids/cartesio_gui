@@ -21,4 +21,10 @@ UpperPanelForm {
             backend.setMaxAngularSpeed(spinboxAngular.value)
         }
     }
+
+    reloadButton.onActivated:
+    {
+        backend.restart_process()
+    }
+
 }

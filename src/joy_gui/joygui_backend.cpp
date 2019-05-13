@@ -6,11 +6,44 @@
 #include <cartesian_interface/SetJoystickTaskMaxSpeed.h>
 #include <cartesian_interface/ToggleAxis.h>
 
+char ** JoyGuiBackEnd::proc_argv = nullptr;
+
 JoyGuiBackEnd::JoyGuiBackEnd(QObject *parent) :
     QObject(parent),
     _nh("cartesian")
 {
-    auto tasks = _ci.getTaskList();
+    try
+    {
+        construct();
+    }
+    catch(std::exception& e)
+    {
+        std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+
+        for(auto t : getTasks())
+        {
+            _joy_map[t.toStdString()];
+        }
+    }
+}
+
+void JoyGuiBackEnd::restart_process()
+{
+    execv("/proc/self/exe", proc_argv);
+}
+
+void JoyGuiBackEnd::construct()
+{
+    _joy_map.clear();
+
+    _twist.fill(0, 6);
+    _enabled_axis.setOnes();
+    _active_task = "MyTask1";
+
+    _ci = std::make_shared<XBot::Cartesian::RosImpl>();
+
+    auto tasks = ci()->getTaskList();
+
     for(auto t : tasks)
     {
         auto sub = _nh.subscribe<geometry_msgs::TwistStamped>(t + "/velocity_reference",
@@ -26,15 +59,15 @@ JoyGuiBackEnd::JoyGuiBackEnd(QObject *parent) :
                                                                      1,
                                                                      &JoyGuiBackEnd::on_joy_status_recv, this);
 
-    setActiveTask(QString::fromStdString(tasks[1]));
+    _active_task = QString::fromStdString(tasks[1]);
 
-    _twist.fill(0, 6);
-    _enabled_axis.setOnes();
+
 }
 
-QStringList JoyGuiBackEnd::getTasks()
+QStringList JoyGuiBackEnd::getTasks() try
 {
-    auto tasks = _ci.getTaskList();
+
+    auto tasks = ci()->getTaskList();
     QStringList q_tasks;
 
     for(auto t : tasks)
@@ -44,9 +77,15 @@ QStringList JoyGuiBackEnd::getTasks()
 
     return q_tasks;
 }
-
-QStringList JoyGuiBackEnd::getLinks()
+catch(std::exception& e)
 {
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+    return {"MyTask1", "MyTask2", "MyTask3"};
+}
+
+QStringList JoyGuiBackEnd::getLinks() try
+{
+
     std::string urdf;
     
     ros::NodeHandle nh_base;
@@ -77,14 +116,22 @@ QStringList JoyGuiBackEnd::getLinks()
 
     return q_links;
 }
+catch(std::exception& e)
+{
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+    return {"MyLink1", "MyLink2", "MyLink3"};
+}
+
 
 QString JoyGuiBackEnd::activeTask() const
 {
     return _active_task;
 }
 
-void JoyGuiBackEnd::setActiveTask(QString active_task)
+void JoyGuiBackEnd::setActiveTask(QString active_task) try
 {
+    ci();
+
     _active_task = active_task;
     _twist.fill(0, 6);
 
@@ -97,13 +144,22 @@ void JoyGuiBackEnd::setActiveTask(QString active_task)
 
     emit activeTaskChanged();
 }
-
-int JoyGuiBackEnd::activeTaskIndex() const
+catch(std::exception& e)
 {
-    auto tasks = _ci.getTaskList();
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+}
+
+int JoyGuiBackEnd::activeTaskIndex() const try
+{
+    auto tasks = ci()->getTaskList();
     auto it = std::find(tasks.begin(), tasks.end(), _active_task.toStdString());
 
     return it - tasks.begin();
+}
+catch(std::exception& e)
+{
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+    return 0;
 }
 
 QVector<int> JoyGuiBackEnd::getEnabledAxis() const
@@ -120,8 +176,10 @@ QVector<int> JoyGuiBackEnd::getEnabledAxis() const
     return q_enabled_axis;
 }
 
-void JoyGuiBackEnd::setEnabledAxis(int idx, bool enabled)
+void JoyGuiBackEnd::setEnabledAxis(int idx, bool enabled) try
 {
+    ci();
+
     _enabled_axis[idx] = enabled;
 
     cartesian_interface::ToggleAxis srv;
@@ -140,6 +198,10 @@ void JoyGuiBackEnd::setEnabledAxis(int idx, bool enabled)
     std::cout << srv.response.message << std::endl;
 
 }
+catch(std::exception& e)
+{
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+}
 
 qreal JoyGuiBackEnd::getMaxLinearSpeed() const
 {
@@ -151,8 +213,10 @@ qreal JoyGuiBackEnd::getMaxAngularSpeed() const
     return _max_angular;
 }
 
-void JoyGuiBackEnd::setMaxLinearSpeed(qreal vel)
+void JoyGuiBackEnd::setMaxLinearSpeed(qreal vel) try
 {
+    ci();
+
     _max_linear = vel;
 
     cartesian_interface::SetJoystickTaskMaxSpeed srv;
@@ -164,9 +228,15 @@ void JoyGuiBackEnd::setMaxLinearSpeed(qreal vel)
         std::cerr << "Unable to call service 'cartesian/joystick/set_max_speed'" << std::endl;
     }
 }
-
-void JoyGuiBackEnd::setMaxAngularSpeed(qreal vel)
+catch(std::exception& e)
 {
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+}
+
+void JoyGuiBackEnd::setMaxAngularSpeed(qreal vel) try
+{
+    ci();
+
     _max_angular = vel;
 
     cartesian_interface::SetJoystickTaskMaxSpeed srv;
@@ -178,14 +248,25 @@ void JoyGuiBackEnd::setMaxAngularSpeed(qreal vel)
         std::cerr << "Unable to call service 'cartesian/joystick/set_max_speed'" << std::endl;
     }
 }
+catch(std::exception& e)
+{
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+}
 
-QString JoyGuiBackEnd::getRefFrame() const
+QString JoyGuiBackEnd::getRefFrame() const try
 {
     return _joy_map.at(_active_task.toStdString()).ref_frame;
 }
-
-void JoyGuiBackEnd::setRefFrame(QString ref_frame)
+catch(std::exception& e)
 {
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+    return "global";
+}
+
+void JoyGuiBackEnd::setRefFrame(QString ref_frame) try
+{
+    ci();
+
     cartesian_interface::SetJoystickTaskBaseFrame srv;
     srv.request.base_frame = ref_frame.toStdString();
     if(!ros::service::call("cartesian/joystick/set_base_frame", srv))
@@ -193,11 +274,15 @@ void JoyGuiBackEnd::setRefFrame(QString ref_frame)
         std::cerr << "Unable to call service 'cartesian/joystick/set_base_frame'" << std::endl;
     }
 }
+catch(std::exception& e)
+{
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+}
 
 void JoyGuiBackEnd::enableVelocityControl(bool enabled) try
 {
     using CtrlMode = XBot::Cartesian::ControlType;
-    _ci.setControlMode(_active_task.toStdString(), enabled ? CtrlMode::Velocity : CtrlMode::Position);
+    ci()->setControlMode(_active_task.toStdString(), enabled ? CtrlMode::Velocity : CtrlMode::Position);
 }
 catch(std::exception& e)
 {
@@ -206,16 +291,17 @@ catch(std::exception& e)
 
 QString JoyGuiBackEnd::getBaseLink() const try
 {
-    return QString::fromStdString(_ci.getBaseLink(_active_task.toStdString()));
+    return QString::fromStdString(ci()->getBaseLink(_active_task.toStdString()));
 }
 catch(std::exception& e)
 {
     std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+    return "MyTask1";
 }
 
 void JoyGuiBackEnd::setBaseLink(QString base_link) try
 {
-    _ci.setBaseLink(_active_task.toStdString(), base_link.toStdString());
+    ci()->setBaseLink(_active_task.toStdString(), base_link.toStdString());
 }
 catch(std::exception& e)
 {
@@ -224,7 +310,7 @@ catch(std::exception& e)
 
 JoyGuiBackEnd::ControlMode JoyGuiBackEnd::getControlMode(QString task) const try
 {
-    auto ci_ctrl = _ci.getControlMode(task.toStdString());
+    auto ci_ctrl = ci()->getControlMode(task.toStdString());
 
     switch(ci_ctrl)
     {
@@ -241,6 +327,7 @@ JoyGuiBackEnd::ControlMode JoyGuiBackEnd::getControlMode(QString task) const try
 catch(std::exception& e)
 {
     std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
+    return ControlMode::Position;
 }
 
 QVector<qreal> JoyGuiBackEnd::getTwist()
@@ -255,7 +342,20 @@ QVector<qreal> JoyGuiBackEnd::getTwist()
     return _twist;
 }
 
-void JoyGuiBackEnd::on_twist_recv(const geometry_msgs::TwistStampedConstPtr& msg, std::string task_id)
+XBot::Cartesian::RosImpl::Ptr JoyGuiBackEnd::ci() const
+{
+    if(_ci)
+    {
+        return _ci;
+    }
+
+    throw std::runtime_error("CI ROS client unavailable");
+
+}
+
+
+
+void JoyGuiBackEnd::on_twist_recv(const geometry_msgs::TwistStampedConstPtr& msg, std::string task_id) try
 {
     if(task_id != _active_task.toStdString())
     {
@@ -272,6 +372,10 @@ void JoyGuiBackEnd::on_twist_recv(const geometry_msgs::TwistStampedConstPtr& msg
     _twist[3] = msg->twist.angular.x;
     _twist[4] = msg->twist.angular.y;
     _twist[5] = msg->twist.angular.z;
+}
+catch(std::exception& e)
+{
+    std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
 }
 
 void JoyGuiBackEnd::on_joy_status_recv(const cartesian_interface::JoystickStatusConstPtr & msg)

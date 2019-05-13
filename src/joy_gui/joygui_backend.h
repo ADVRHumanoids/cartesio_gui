@@ -16,6 +16,8 @@ public:
 
     explicit JoyGuiBackEnd(QObject * parent = nullptr);
 
+    Q_INVOKABLE void restart_process();
+
     Q_INVOKABLE QStringList getTasks();
     Q_INVOKABLE QStringList getLinks();
 
@@ -49,6 +51,8 @@ public:
 
     Q_INVOKABLE QVector<qreal> getTwist();
 
+    static char ** proc_argv;
+
 
 signals:
 
@@ -71,10 +75,13 @@ private:
 
     typedef Eigen::Matrix<int, 6, 1> Vector6i;
 
+    XBot::Cartesian::RosImpl::Ptr ci() const;
+    void construct();
+
     void on_twist_recv(const geometry_msgs::TwistStampedConstPtr& msg, std::string task_id);
     void on_joy_status_recv(const cartesian_interface::JoystickStatusConstPtr& msg);
 
-    XBot::Cartesian::RosImpl _ci;
+    mutable XBot::Cartesian::RosImpl::Ptr _ci;
     ros::NodeHandle _nh;
 
     ros::Subscriber _status_sub;

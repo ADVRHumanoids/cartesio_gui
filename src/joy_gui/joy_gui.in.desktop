@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=CartesI/O Joystick GUI
+Exec=@PATH_TO_JOY_GUI_EXEC@
+Icon=@PATH_TO_JOY_GUI_ICON@
+Terminal=false
+Type=Application
+Name[en_US]=joy_gui

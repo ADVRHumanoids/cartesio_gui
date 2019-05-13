@@ -1,13 +1,26 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QCoreApplication>
 
 #include "joygui_backend.h"
 
 int main(int argc, char *argv[])
 {
+    std::vector<char *> args_vec;
+
+    for(int i = 0; i < argc; i++)
+    {
+        args_vec.push_back(argv[i]);
+    }
+
+    args_vec.push_back(static_cast<char *>(nullptr));
+
+    JoyGuiBackEnd::proc_argv = args_vec.data();
+
     ros::init(argc, argv, "joy_gui_node");
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication::setDesktopSettingsAware(false);
 
     QGuiApplication app(argc, argv);
 

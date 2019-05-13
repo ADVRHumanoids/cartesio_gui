@@ -16,3 +16,19 @@ install(TARGETS joy_gui
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+
+get_filename_component(PATH_TO_JOY_GUI_EXEC "${CATKIN_PACKAGE_BIN_DESTINATION}/joy_gui"
+    REALPATH BASE_DIR "${CMAKE_INSTALL_PREFIX}")
+get_filename_component(PATH_TO_JOY_GUI_ICON "${CATKIN_PACKAGE_SHARE_DESTINATION}/console.png"
+    REALPATH BASE_DIR "${CMAKE_INSTALL_PREFIX}")
+
+configure_file(src/joy_gui/joy_gui.in.desktop joy_gui.desktop)
+
+install(FILES src/joy_gui/pics/console.png
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/joy_gui.desktop
+    DESTINATION "~/.local/share/applications")
+
+

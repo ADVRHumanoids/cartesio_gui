@@ -20,7 +20,10 @@ TabBar {
 
     function loadTabButtons()
     {
-        tabBar.removeItem(tabBar.currentItem)
+        while(tabBar.count > 0)
+        {
+            tabBar.removeItem(tabBar.currentItem)
+        }
 
         console.info("Loading tab bar buttons..")
 
