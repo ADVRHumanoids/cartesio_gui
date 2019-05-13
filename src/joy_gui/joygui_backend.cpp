@@ -260,7 +260,7 @@ QString JoyGuiBackEnd::getRefFrame() const try
 catch(std::exception& e)
 {
     std::cerr << "Error in " << __func__ << ": " << e.what() << std::endl;
-    return "global";
+    return "";
 }
 
 void JoyGuiBackEnd::setRefFrame(QString ref_frame) try
