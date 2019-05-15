@@ -27,4 +27,20 @@ UpperPanelForm {
         backend.restart_process()
     }
 
+    resetViewButton.onReleased:
+    {
+        viewer3d.resetCamera()
+    }
+
+
+
 }
+
+
+
+
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

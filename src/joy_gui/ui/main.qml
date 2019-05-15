@@ -7,7 +7,7 @@ import joygui.backend 1.0
 ApplicationWindow {
 
     visible: true
-    width: 640
+    width: 660
     height: 760
     title: qsTr("CartesI/O Joystick GUI")
 

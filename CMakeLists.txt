@@ -20,7 +20,7 @@ list(APPEND CMAKE_PREFIX_PATH ${QT_PATH})
 find_package(Qt5UiTools ${MINIMUM_QT_VERSION} REQUIRED)
 find_package(Qt5Widgets ${MINIMUM_QT_VERSION} REQUIRED)
 find_package(Qt5Quick ${MINIMUM_QT_VERSION} REQUIRED)
-find_package(catkin REQUIRED COMPONENTS cartesian_interface rviz)
+find_package(catkin REQUIRED COMPONENTS cartesian_interface rviz tf roslib)
 find_package(XBotInterface REQUIRED)
 
 catkin_package()

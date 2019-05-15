@@ -19,5 +19,7 @@
         <file>BackEndComponent.qml</file>
         <file>TaskTabBarForm.ui.qml</file>
         <file>TaskTabBar.qml</file>
+        <file>Viewer3D.qml</file>
+        <file>Viewer3DEntity.qml</file>
     </qresource>
 </RCC>

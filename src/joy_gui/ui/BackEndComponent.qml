@@ -21,6 +21,7 @@ JoyGuiBackEnd
 
         /* Set swipe tab according to active task */
         taskTabBar.setCurrentIndex(activeTaskIndex())
+        upperPanel.viewer3d.setTaskName(backend.activeTask)
 
         /* Update task baselink */
         var baselink = backend.getBaseLink()
@@ -55,19 +56,23 @@ JoyGuiBackEnd
         if(ref_frame === "")
         {
             lowerPanel.swipeView.currentItem.radioButtonGlobal.checked = true
+            upperPanel.viewer3d.setBaseFrame("global")
         }
         else if(ref_frame === "base_link")
         {
             lowerPanel.swipeView.currentItem.radioButtonBaseLink.checked = true
+            upperPanel.viewer3d.setBaseFrame("base_link")
         }
         else if(ref_frame === backend.activeTask)
         {
             lowerPanel.swipeView.currentItem.radioButtonLocal.checked = true
+            upperPanel.viewer3d.setBaseFrame("local")
         }
         else
         {
             print("Error: reference frame not valid -> " + ref_frame)
         }
+
 
         /* Re-enable services */
         send_service = true

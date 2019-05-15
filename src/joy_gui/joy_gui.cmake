@@ -1,9 +1,10 @@
 
-find_package(catkin REQUIRED COMPONENTS roscpp cartesian_interface urdf)
+find_package(catkin REQUIRED COMPONENTS roscpp cartesian_interface urdf tf roslib)
 find_package(Eigen3 REQUIRED)
 
 add_executable(joy_gui src/joy_gui/main.cpp 
                        src/joy_gui/joygui_backend.cpp 
+                       src/joy_gui/viewer3d_backend.cpp
                        src/joy_gui/ui/qml.qrc)
                        
 target_compile_definitions(joy_gui PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)

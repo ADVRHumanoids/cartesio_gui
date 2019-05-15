@@ -7,7 +7,7 @@ import joygui.backend 1.0
 Page {
 
     implicitWidth: 640
-    implicitHeight: 460
+    implicitHeight: 480
 
     header: Label {
         id: page_label
@@ -22,6 +22,8 @@ Page {
     property alias spinboxAngular: spinboxAngular
     property alias vbars: vbars
     property alias reloadButton: reloadButton
+    property alias viewer3d: viewer3d
+    property alias resetViewButton: resetViewButton
 
     Grid {
         id: grid1
@@ -31,7 +33,7 @@ Page {
         anchors.leftMargin: 10
         anchors.fill: parent
 
-        rows: 2
+        rows: 3
         columns: 2
 
         /* Velocity bars */
@@ -48,13 +50,21 @@ Page {
         /* Mistery item */
         GroupBox {
 
-            title: "Mistery box"
+            title: "Link visualization"
+            Layout.rowSpan: 2
 
-            Image {
-                id: wipImage
-                sourceSize.height: 200
-                sourceSize.width: 280
-                source: "../pics/worker.svg"
+            Column {
+
+                spacing: 5
+
+                Viewer3D {
+                    id: viewer3d
+                }
+
+                Button {
+                    id: resetViewButton
+                    text: "Reset view"
+                }
             }
         }
 
@@ -81,7 +91,7 @@ Page {
                     editable: false
                     from: 0.0
                     to: 1.0
-                    stepSize: 0.1
+                    stepSize: 0.05
                 }
 
                 Label {
@@ -95,7 +105,7 @@ Page {
                     wrap: false
                     from: 0.0
                     to: 1.0
-                    stepSize: 0.1
+                    stepSize: 0.05
                 }
             }
         }

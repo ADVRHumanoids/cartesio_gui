@@ -1,8 +1,10 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QCoreApplication>
+#include <QQuickView>
 
 #include "joygui_backend.h"
+#include "viewer3d_backend.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,6 +27,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<JoyGuiBackEnd>("joygui.backend", 1, 0, "JoyGuiBackEnd");
+    qmlRegisterType<Utils3D>("Viewer3D.Utils3D", 1, 0, "Utils3D");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
