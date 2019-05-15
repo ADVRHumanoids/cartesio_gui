@@ -50,6 +50,31 @@ Item
                 id: viewer
             }
         }
+
+        MouseArea {
+            anchors.fill: parent
+
+            propagateComposedEvents: true
+
+            property point startPoint
+            property real sensitivity: 1.5
+
+            function updateView(mouse) {
+                viewer.camera.panAboutViewCenter((startPoint.x - mouse.x) * sensitivity * viewer.camera.fieldOfView / width, Qt.vector3d(0.0, 1.0, 0.0))
+                viewer.camera.tiltAboutViewCenter((mouse.y - startPoint.y) * sensitivity * viewer.camera.fieldOfView / height)
+                startPoint = Qt.point(mouse.x, mouse.y)
+            }
+
+            onPressed: {
+                startPoint = Qt.point(mouse.x, mouse.y)
+            }
+            onPositionChanged: {
+                updateView(mouse)
+            }
+            onReleased: {
+                updateView(mouse)
+            }
+        }
     }
 
 
