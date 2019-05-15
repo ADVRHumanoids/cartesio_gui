@@ -16,6 +16,8 @@ Item {
         id: swipeView
         currentIndex: taskTabBar.currentIndex
 
+        clip: true
+
         TaskPage {
         }
     }
