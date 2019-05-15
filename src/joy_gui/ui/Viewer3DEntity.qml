@@ -11,6 +11,8 @@ Entity {
 
     id: sceneRoot
 
+    property alias camera: camera
+
     property string link_name: ""
     property string ctrl_type: "global"
     property string mesh_url: ""
@@ -39,6 +41,7 @@ Entity {
         camera.setUpVector(Qt.vector3d( 0.0, 1.0, 0.0 ))
         camera.setViewCenter(Qt.vector3d( 0.0, 0.0, 0.0 ))
     }
+
 
     function setTaskName(task)
     {
