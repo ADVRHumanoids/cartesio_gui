@@ -3,10 +3,16 @@ project(cartesio_gui)
 
 add_compile_options(-std=c++14)
 add_definitions(-DXBOT_MSGS_SUPPORT)
+option(QT_VERSION_GREATER_THAN_5_5 "Set to true if Qt5 > 5.5 is installed" FALSE)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(MINIMUM_QT_VERSION 5.9)
+
+if(${QT_VERSION_GREATER_THAN_5_5})
+    set(MINIMUM_QT_VERSION 5.9)
+else()
+    set(MINIMUM_QT_VERSION 5.5)
+endif()
 
 ## Get custom path to QT from env
 set(QT_PATH $ENV{CARTESIO_GUI_QT_PATH})
@@ -30,7 +36,10 @@ include_directories(include/
 
 include(src/cartesio/cartesio.cmake)
 include(src/sliders/sliders.cmake)
-include(src/joy_gui/joy_gui.cmake)
+
+if(${QT_VERSION_GREATER_THAN_5_5})
+    include(src/joy_gui/joy_gui.cmake)
+endif()
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 install(DIRECTORY launch/
