@@ -123,7 +123,10 @@ class WrenchGuiWidget : public QWidget
 {
 
 public:
-    WrenchGuiWidget(QWidget * parent = 0);
+    typedef std::shared_ptr<WrenchGuiWidget> Ptr;
+
+    WrenchGuiWidget(const int dT_ms, QWidget * parent = 0);
+    void update();
 
 private:
     QPushButton* _reset_button;
@@ -142,6 +145,8 @@ private:
 
     QString _topic;
     RosInterface<geometry_msgs::WrenchStamped> _ros;
+
+    QTimer* _timer;
 
 };
 

@@ -18,7 +18,7 @@ QWidget * LoadUiFile(QWidget * parent)
 
 }
 
-WrenchGuiWidget::WrenchGuiWidget(QWidget * parent):
+WrenchGuiWidget::WrenchGuiWidget(const int dT_ms, QWidget * parent):
        QWidget(parent),
        _ros("geometry_msgs/WrenchStamped")
 {
@@ -57,6 +57,9 @@ WrenchGuiWidget::WrenchGuiWidget(QWidget * parent):
             QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &WrenchGuiWidget::on_topic_changed);
 
+    _timer = new QTimer(this);
+    connect(_timer, &QTimer::timeout, this, &WrenchGuiWidget::update);
+    _timer->start(dT_ms); //ms
 
 }
 
@@ -105,4 +108,23 @@ void WrenchGuiWidget::on_send_button_clicked(bool checked)
         std::cout<<"START sending references"<<std::endl;
     }
 
+}
+
+void WrenchGuiWidget::update()
+{
+    if(_send_reference && _ros.getTopics().size() > 0)
+    {
+        geometry_msgs::WrenchStamped msg;
+        msg.header.stamp = ros::Time::now();
+
+        msg.wrench.force.x = _sliders[0]->getValue();
+        msg.wrench.force.y = _sliders[1]->getValue();
+        msg.wrench.force.z = _sliders[2]->getValue();
+
+        msg.wrench.torque.x = _sliders[3]->getValue();
+        msg.wrench.torque.y = _sliders[4]->getValue();
+        msg.wrench.torque.z = _sliders[5]->getValue();
+
+        _ros.publish(_topic.toStdString(), msg);
+    }
 }
