@@ -128,3 +128,9 @@ void WrenchGuiWidget::update()
         _ros.publish(_topic.toStdString(), msg);
     }
 }
+
+void WrenchGuiWidget::setLimits(const int min, const int max)
+{
+    for(unsigned int i = 0; i < _sliders.size(); ++i)
+        _sliders[i]->setLimits(min, max);
+}

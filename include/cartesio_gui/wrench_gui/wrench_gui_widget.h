@@ -127,6 +127,7 @@ public:
 
     WrenchGuiWidget(const int dT_ms, QWidget * parent = 0);
     void update();
+    void setLimits(const int min, const int max);
 
 private:
     QPushButton* _reset_button;
