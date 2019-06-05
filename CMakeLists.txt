@@ -36,6 +36,7 @@ include_directories(include/
 
 include(src/cartesio/cartesio.cmake)
 include(src/sliders/sliders.cmake)
+include(src/wrench_gui/wrench_gui.cmake)
 
 if(${QT_VERSION_GREATER_THAN_5_5})
     include(src/joy_gui/joy_gui.cmake)
