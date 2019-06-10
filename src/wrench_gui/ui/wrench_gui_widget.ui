@@ -240,19 +240,15 @@
      <property name="title">
       <string/>
      </property>
-     <widget class="QPushButton" name="reset_button">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>30</y>
-        <width>89</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Reset</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="reset_button">
+        <property name="text">
+         <string>Reset</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
