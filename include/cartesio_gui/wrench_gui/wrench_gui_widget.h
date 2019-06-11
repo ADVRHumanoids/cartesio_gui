@@ -19,21 +19,25 @@ public:
     RosInterface(const std::string& interested_data_type):
         _data_type(interested_data_type)
     {
-        ros::master::V_TopicInfo master_topics;
-        ros::master::getTopics(master_topics);
-
-        for (ros::master::V_TopicInfo::iterator it = master_topics.begin() ; it != master_topics.end(); it++) {
-          const ros::master::TopicInfo& info = *it;
-          if(info.datatype == _data_type)
-              _topics.push_back(info.name);
+        XmlRpc::XmlRpcValue args, result, payload;
+        args[0] = ros::this_node::getName();
+        if (!ros::master::execute("getTopicTypes", args, result, payload, true))
+        {
+            throw std::runtime_error("Can not execute getSystemState");
         }
+        for(unsigned int j = 0; j < payload.size(); ++j)
+        {
+            if(payload[j][1] == _data_type)
+                _topics.push_back(payload[j][0]);
+        }
+
 
         std::cout<<"Available topics:"<<std::endl;
         for(unsigned int i = 0; i < _topics.size(); ++i)
         {
             std::cout<<_topics[i]<<std::endl;
-
-            _publishers[_topics[i]] = _n.advertise<data_type>(_topics[i], 1);
+            _publishers.insert ( std::pair<std::string,ros::Publisher>
+                                 (_topics[i], _n.advertise<data_type>(_topics[i], 1)) );
         }
     }
 
@@ -65,6 +69,7 @@ public:
         _spin_box = parent_widget->findChild<QDoubleSpinBox *>(spin_box_name);
 
         this->setLimits(-100, 100);
+        this->setValue(0.0);
 
         connect(_slider, &QSlider::valueChanged,
                     this, &SliderSpinBoxSync::on_slider_value_changed);

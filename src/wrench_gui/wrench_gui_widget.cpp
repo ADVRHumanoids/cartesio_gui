@@ -56,6 +56,12 @@ WrenchGuiWidget::WrenchGuiWidget(const int dT_ms, QWidget * parent):
     connect(_topic_selector,
             QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &WrenchGuiWidget::on_topic_changed);
+    if(_ros.getTopics().size() > 0)
+    {
+        _topic_selector->setCurrentIndex(0);
+        on_topic_changed(0);
+    }
+
 
     _timer = new QTimer(this);
     connect(_timer, &QTimer::timeout, this, &WrenchGuiWidget::update);
@@ -127,6 +133,8 @@ void WrenchGuiWidget::update()
 
         _ros.publish(_topic.toStdString(), msg);
     }
+
+    ros::spinOnce();
 }
 
 void WrenchGuiWidget::setLimits(const int min, const int max)
