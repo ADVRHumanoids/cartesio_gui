@@ -9,11 +9,18 @@ int main(int argc, char *argv[])
 
     ros::NodeHandle nhpr("~");
 
+    int dT;
+    nhpr.param<int>("publish_freq", dT, 100);
+
+    int lims;
+    nhpr.param<int>("limits", lims, 100);
+
+
     QApplication a(argc, argv);
     cartesio_gui::WrenchGuiWidget::Ptr main_view =
-            std::make_shared<cartesio_gui::WrenchGuiWidget>(100);
+            std::make_shared<cartesio_gui::WrenchGuiWidget>(dT);
 
-    //main_view->setLimits(-200, 200);
+    main_view->setLimits(-lims, lims);
 
     main_view->show();
     return a.exec();

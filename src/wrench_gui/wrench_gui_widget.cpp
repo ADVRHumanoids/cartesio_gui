@@ -36,6 +36,9 @@ WrenchGuiWidget::WrenchGuiWidget(const int dT_ms, QWidget * parent):
     _send_button = findChild<QPushButton *>("send_button");
     _send_button->setText("Send");
     _send_reference = false;
+    if(_ros.getTopics().size() == 0)
+        _send_button->setEnabled(false);
+
     connect(_send_button, &QPushButton::clicked, this, &WrenchGuiWidget::on_send_button_clicked);
 
     _sliders.push_back(std::make_shared<SliderSpinBoxSync>
