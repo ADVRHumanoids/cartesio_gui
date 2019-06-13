@@ -56,8 +56,11 @@ WrenchGuiWidget::WrenchGuiWidget(const int dT_ms, QWidget * parent):
 
     _topic_selector = findChild<QComboBox *>("topic_selector");
     fillTopicSelector(_ros.getTopics());
+    
+    void (QComboBox::* currentIndexChangedInt)(int) = &QComboBox::currentIndexChanged;
+    
     connect(_topic_selector,
-            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            currentIndexChangedInt,
             this, &WrenchGuiWidget::on_topic_changed);
     if(_ros.getTopics().size() > 0)
     {
