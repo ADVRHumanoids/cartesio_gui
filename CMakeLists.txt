@@ -34,6 +34,7 @@ catkin_package()
 include_directories(include/
                     ${catkin_INCLUDE_DIRS})
 
+include(src/qt_utils/qt_utils.cmake)
 include(src/cartesio/cartesio.cmake)
 include(src/sliders/sliders.cmake)
 include(src/wrench_gui/wrench_gui.cmake)
