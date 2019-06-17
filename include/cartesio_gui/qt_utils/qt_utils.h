@@ -11,12 +11,13 @@ namespace cartesio_gui
 {
     namespace qt_utils
     {
-        template <class data_type>
-        class RosInterface
+
+        template <class msg_type>
+        class RosSpecialPublisher
         {
         public:
-            RosInterface(const std::string& interested_data_type):
-                _data_type(interested_data_type)
+            RosSpecialPublisher(const std::string& msg_data_type):
+                _data_type(msg_data_type)
             {
                 XmlRpc::XmlRpcValue args, result, payload;
                 args[0] = ros::this_node::getName();
@@ -36,15 +37,19 @@ namespace cartesio_gui
                 {
                     std::cout<<_topics[i]<<std::endl;
                     _publishers.insert ( std::pair<std::string,ros::Publisher>
-                                         (_topics[i], _n.advertise<data_type>(_topics[i], 1)) );
+                                         (_topics[i], _n.advertise<msg_type>(_topics[i], 1)) );
                 }
             }
 
             std::vector<std::string> getTopics(){return _topics;}
 
-            void publish(const std::string& topic, const data_type& msg)
+            bool publish(const std::string& topic, const msg_type& msg)
             {
+                if(!_publishers[topic])
+                    return false;
+
                 _publishers[topic].publish(msg);
+                return true;
             }
         private:
             std::string _data_type;
@@ -56,6 +61,122 @@ namespace cartesio_gui
 
 
 
+        template <class msg_type>
+        class RosPublisherWidget: public QWidget,
+                                  public RosSpecialPublisher<msg_type>
+        {
+        public:
+            typedef std::shared_ptr< RosPublisherWidget<msg_type> > Ptr;
+
+            RosPublisherWidget(const int dT_ms, const std::string& msg_data_type, QWidget* parent_widget = 0):
+                QWidget(parent_widget),
+                RosSpecialPublisher<msg_type>(msg_data_type),
+                _dT_ms(dT_ms)
+            {
+                _send_button = findChild<QPushButton *>("pushButton");
+                _send_button->setText("Send");
+                _send_reference = false;
+                if(this->getTopics().size() == 0)
+                    _send_button->setEnabled(false);
+
+                connect(_send_button, &QPushButton::clicked, this, &RosPublisherWidget::on_send_button_clicked);
+
+                _topic_selector = findChild<QComboBox *>("comboBox");
+                fillTopicSelector(this->getTopics());
+
+                void (QComboBox::* currentIndexChangedInt)(int) = &QComboBox::currentIndexChanged;
+
+                connect(_topic_selector, currentIndexChangedInt, this, &RosPublisherWidget::on_topic_changed);
+                if(this->getTopics().size() > 0)
+                {
+                    _topic_selector->setCurrentIndex(0);
+                    on_topic_changed(0);
+                }
+
+
+                _timer = new QTimer(this);
+                connect(_timer, &QTimer::timeout, this, &RosPublisherWidget::update);
+                _timer->start(_dT_ms); //ms
+            }
+
+            void fillMsg(const msg_type& msg)
+            {
+                _msg = msg;
+            }
+
+        private:
+
+            QPushButton* _send_button;
+            bool _send_reference;
+
+            int _dT_ms;
+
+            void on_send_button_clicked(bool checked)
+            {
+                if(_send_reference)
+                {
+                    _send_reference = false;
+                    _send_button->setText("Send");
+                    std::cout<<"STOP sending references"<<std::endl;
+                }
+                else
+                {
+                    _send_reference = true;
+                    _send_button->setText("Stop");
+                    std::cout<<"START sending references"<<std::endl;
+                }
+            }
+
+            QComboBox* _topic_selector;
+            QStringList _available_topics;
+
+            void fillTopicSelector(const std::vector<std::string>& topics)
+            {
+                if(topics.size() > 0)
+                {
+                    for(unsigned int i = 0; i < topics.size(); ++i)
+                    {
+                        QString s(topics[i].c_str());
+                        _available_topics.push_back(s);
+                    }
+
+                    for(unsigned int i = 0; i < _available_topics.size(); ++i)
+                        _topic_selector->insertItem(i, _available_topics[i]);
+                }
+                else {
+                    _topic_selector->insertItem(0, "none");
+                }
+            }
+
+
+            void on_topic_changed(int i)
+            {
+                _topic = _topic_selector->itemText(i);
+                std::cout<<"Publish to: "<<_topic.toStdString()<<std::endl;
+            }
+
+            QString _topic;
+            msg_type _msg;
+
+            QTimer* _timer;
+
+            void update()
+            {
+                if(_send_reference && this->getTopics().size() > 0)
+                {
+                    this->publish(_topic.toStdString(), _msg);
+                }
+
+                ros::spinOnce();
+            }
+        };
+
+
+
+    /**
+     * @brief The BoxedSliderWidget class provides a widget with integrated a slider and a double spin box which
+     * are updated each other.
+     */
     class BoxedSliderWidget: public QWidget
     {
     public:
@@ -63,14 +184,37 @@ namespace cartesio_gui
 
         BoxedSliderWidget(QWidget* parent_widget = 0);
 
+        /**
+         * @brief getValue
+         * @return actual value of the slider and double spin box
+         */
         double getValue(){return _value;}
 
+        /**
+         * @brief on_value_changed_call_back implements here your code to be called every time the value in the
+         * slider or double spin box change
+         * @param value of the slider and double spin box
+         */
         virtual void on_value_changed_call_back(const int value) = 0;
 
+        /**
+         * @brief setLimits of the slider and double spin box
+         * @param min
+         * @param max
+         */
         void setLimits(int min, int max);
 
+        /**
+         * @brief setLable
+         * @param label of the slider
+         */
         void setLable(const QString& label);
 
+        /**
+         * @brief setValue of both slider and double spin box
+         * @param value
+         */
+        void setValue(int value);
 
     private:
         QWidget * LoadUiFile(QWidget * parent)
@@ -100,10 +244,6 @@ namespace cartesio_gui
         void on_slider_value_changed(int value);
 
         void on_box_value_changed();
-
-        void setValue(int value);
-
-
 
     };
 }

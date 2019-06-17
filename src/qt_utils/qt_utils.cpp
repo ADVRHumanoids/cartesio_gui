@@ -2,7 +2,7 @@
 using namespace cartesio_gui::qt_utils;
 
 BoxedSliderWidget::BoxedSliderWidget(QWidget* parent_widget):
-_parent_widget(parent_widget)
+    QWidget(parent_widget)
 {
     /* Create GUI layout */
     auto * ui = LoadUiFile(this);
