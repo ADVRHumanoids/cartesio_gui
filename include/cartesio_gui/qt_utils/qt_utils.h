@@ -62,17 +62,35 @@ namespace cartesio_gui
 
 
         template <class msg_type>
+        /**
+         * @brief The RosPublisherWidget class implements a widget with a topic slector and a button which
+         * enable/disable a periodic publisher
+         */
         class RosPublisherWidget: public QWidget,
                                   public RosSpecialPublisher<msg_type>
         {
         public:
             typedef std::shared_ptr< RosPublisherWidget<msg_type> > Ptr;
 
+            /**
+             * @brief RosPublisherWidget
+             * @param dT_ms period of publisher (in ms)
+             * @param msg_data_type ex: "geometry_msgs/WrenchStamped"
+             * @param parent_widget
+             */
             RosPublisherWidget(const int dT_ms, const std::string& msg_data_type, QWidget* parent_widget = 0):
                 QWidget(parent_widget),
                 RosSpecialPublisher<msg_type>(msg_data_type),
                 _dT_ms(dT_ms)
             {
+                /* Create GUI layout */
+                auto * ui = LoadUiFile(this);
+
+                auto * layout = new QVBoxLayout;
+                layout->addWidget(ui);
+
+                setLayout(layout);
+
                 _send_button = findChild<QPushButton *>("pushButton");
                 _send_button->setText("Send");
                 _send_reference = false;
@@ -99,12 +117,29 @@ namespace cartesio_gui
                 _timer->start(_dT_ms); //ms
             }
 
+            /**
+             * @brief fillMsg
+             * @param msg which will be published
+             */
             void fillMsg(const msg_type& msg)
             {
                 _msg = msg;
             }
 
         private:
+
+            QWidget * LoadUiFile(QWidget * parent)
+            {
+                QUiLoader loader;
+
+                QFile file(":/ui/ros_publisher_widget.ui");
+                file.open(QFile::ReadOnly);
+
+                QWidget *formWidget = loader.load(&file, parent);
+                file.close();
+
+                return formWidget;
+            }
 
             QPushButton* _send_button;
             bool _send_reference;
@@ -228,8 +263,6 @@ namespace cartesio_gui
             file.close();
 
             return formWidget;
-
-
         }
 
         QSlider* _slider;
