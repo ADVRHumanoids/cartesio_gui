@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>ui/cartesian_impedance_gui.ui</file>
+    <file>ui/boxed_slider.ui</file>
+    <file>ui/ros_publisher_widget.ui</file>
+</qresource>
+</RCC>

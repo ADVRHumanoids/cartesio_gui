@@ -38,6 +38,7 @@ include(src/qt_utils/qt_utils.cmake)
 include(src/cartesio/cartesio.cmake)
 include(src/sliders/sliders.cmake)
 include(src/wrench_gui/wrench_gui.cmake)
+include(src/cartesian_impedance_gui/cartesian_impedance_gui.cmake)
 
 if(${QT_VERSION_GREATER_THAN_5_5})
     include(src/joy_gui/joy_gui.cmake)

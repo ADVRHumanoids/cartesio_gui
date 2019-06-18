@@ -230,7 +230,8 @@ namespace cartesio_gui
          * slider or double spin box change
          * @param value of the slider and double spin box
          */
-        virtual void on_value_changed_call_back(const int value) = 0;
+        virtual void on_value_changed_call_back(const int value)
+        {}
 
         /**
          * @brief setLimits of the slider and double spin box
