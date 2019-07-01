@@ -34,13 +34,13 @@ public:
         _stiffness_sliders.back().get()->setLimits(-300, 300);
         _stiffness_sliders.push_back(std::make_shared<BoxedSliderWidget>(this));
         _stiffness_sliders.back().get()->setLable("R");
-        _stiffness_sliders.back().get()->setLimits(-30, 30);
+        _stiffness_sliders.back().get()->setLimits(-300, 300);
         _stiffness_sliders.push_back(std::make_shared<BoxedSliderWidget>(this));
         _stiffness_sliders.back().get()->setLable("P");
-        _stiffness_sliders.back().get()->setLimits(-30, 30);
+        _stiffness_sliders.back().get()->setLimits(-300, 300);
         _stiffness_sliders.push_back(std::make_shared<BoxedSliderWidget>(this));
         _stiffness_sliders.back().get()->setLable("Y");
-        _stiffness_sliders.back().get()->setLimits(-30, 30);
+        _stiffness_sliders.back().get()->setLimits(-300, 300);
 
         auto layout_tmp = findChild<QVBoxLayout *>("verticalLayout_3");
         for(unsigned int i = 0; i < _stiffness_sliders.size(); ++i)
