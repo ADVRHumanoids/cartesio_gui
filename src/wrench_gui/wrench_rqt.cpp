@@ -39,10 +39,7 @@ private:
 
 WrenchWidgetRqt::WrenchWidgetRqt()
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
     setObjectName("XBotWrenchSlider");
-//     setWindowTitle("Joint Sliders");
-    
 }
 
 void WrenchWidgetRqt::initPlugin(qt_gui_cpp::PluginContext& context)

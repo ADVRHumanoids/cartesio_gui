@@ -39,10 +39,7 @@ private:
 
 SlidersWidgetRqt::SlidersWidgetRqt()
 {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
     setObjectName("XBotSlider");
-//     setWindowTitle("Joint Sliders");
-    
 }
 
 void SlidersWidgetRqt::initPlugin(qt_gui_cpp::PluginContext& context)
