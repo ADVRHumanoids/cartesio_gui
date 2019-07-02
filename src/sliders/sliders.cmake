@@ -52,3 +52,20 @@ install(FILES
   sliders_rviz_panel_plugin_description.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
+## Compile Sliders RQT Panel
+add_library(sliders_rqt SHARED 
+    src/sliders/sliders_rqt.cpp
+)
+
+target_link_libraries(sliders_rqt PRIVATE sliders_widget)
+
+install(TARGETS sliders_rqt
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(FILES
+  sliders_rqt_plugin_description.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+

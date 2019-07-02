@@ -1,0 +1,13 @@
+<library path="../../lib/libsliders_rqt">
+  <class name="cartesio_rqt/SlidersWidgetRqt"
+         type="cartesio_rqt::SlidersWidgetRqt"
+         base_class_type="rqt_gui_cpp::Plugin">
+    <description>
+        Joint sliders with chain-wise organization
+    </description>
+    <qtgui>
+        <label>Joint Sliders</label>
+        <icon type="theme">utilities-system-monitor</icon>
+    </qtgui>
+  </class>
+</library>

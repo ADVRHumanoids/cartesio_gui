@@ -55,11 +55,14 @@
   <build_export_depend>rviz</build_export_depend>
   <exec_depend>cartesian_interface</exec_depend>
   <exec_depend>rviz</exec_depend>
-
+  <depend>rqt_gui</depend>
+  <depend>rqt_gui_cpp</depend>
+    
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
       <rviz plugin="${prefix}/cartesio_rviz_panel_plugin_description.xml"/>
       <rviz plugin="${prefix}/sliders_rviz_panel_plugin_description.xml"/>
+      <rqt_gui plugin="${prefix}/sliders_rqt_plugin_description.xml"/>
   </export>
 </package>
