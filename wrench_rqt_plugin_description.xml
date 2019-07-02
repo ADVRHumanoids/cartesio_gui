@@ -1,0 +1,13 @@
+<library path="../../lib/libwrench_rqt">
+  <class name="cartesio_rqt/WrenchWidgetRqt"
+         type="cartesio_rqt::WrenchWidgetRqt"
+         base_class_type="rqt_gui_cpp::Plugin">
+    <description>
+        Wrench sliders 
+    </description>
+    <qtgui>
+        <label>Wrench Sliders</label>
+        <icon type="theme">utilities-system-monitor</icon>
+    </qtgui>
+  </class>
+</library>

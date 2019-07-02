@@ -5,11 +5,19 @@
 
 #include <RobotInterfaceROS/ConfigFromParam.h>
 
+inline void initSlidersResource()
+{
+    Q_INIT_RESOURCE(sliders_widget_resources);
+}
+
 namespace
 {
 
 QWidget * LoadUiFile(QWidget * parent)
 {
+    
+    initSlidersResource();
+    
     QUiLoader loader;
 
     QFile file(":/ui/impedance_widget.ui");

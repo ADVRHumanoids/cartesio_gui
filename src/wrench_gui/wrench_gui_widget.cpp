@@ -1,12 +1,23 @@
 #include <cartesio_gui/wrench_gui/wrench_gui_widget.h>
 
 
+inline void initWrenchGuiResource()
+{
+    Q_INIT_RESOURCE(wrench_gui_resources);
+}
+
 using namespace cartesio_gui;
+
+
+namespace
+{
 
 QWidget * LoadUiFile(QWidget * parent)
 {
+    initWrenchGuiResource();
+    
     QUiLoader loader;
-
+    
     QFile file(":/ui/wrench_gui_widget.ui");
     file.open(QFile::ReadOnly);
 
@@ -15,6 +26,7 @@ QWidget * LoadUiFile(QWidget * parent)
 
     return formWidget;
 
+}
 
 }
 
