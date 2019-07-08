@@ -10,7 +10,7 @@ class ContainerWidget: public QWidget
 public:
     typedef std::shared_ptr<ContainerWidget> Ptr;
 
-    ContainerWidget(QWidget* parent_widget = 0):
+    ContainerWidget(const double dT, QWidget* parent_widget = 0):
         QWidget (parent_widget)
     {
         /* Create GUI layout */
@@ -81,16 +81,30 @@ public:
         layout_tmp = findChild<QVBoxLayout *>("verticalLayout");
 
         _publisher_widget = std::make_shared<RosPublisherWidget<cartesian_interface::Impedance6> >(
-                    100, "cartesian_interface/Impedance6");
+                    dT, "cartesian_interface/Impedance6");
 
         layout_tmp->addWidget(_publisher_widget.get());
 
         _timer = new QTimer(this);
         connect(_timer, &QTimer::timeout, this, &ContainerWidget::update);
-        _timer->start(200); //ms
+        _timer->start(2*dT); //ms, data are updated from the slider to the message twice the publication rate
     }
 
     cartesian_interface::Impedance6 msg;
+
+    void setMaxStiffness(const int stiffness_max)
+    {
+        for(unsigned int i = 0; i < _stiffness_sliders.size(); ++i)
+            _stiffness_sliders[i]->setLimits(0, stiffness_max);
+    }
+
+    void setMaxDamping(const int damping_max)
+    {
+        for(unsigned int i = 0; i < _damping_sliders.size(); ++i)
+            _damping_sliders[i]->setLimits(0, damping_max);
+    }
+
+
 
 private:
     QTimer* _timer;
@@ -166,9 +180,25 @@ int main(int argc, char *argv[])
 
     ros::init(argc, argv, "cartesian_impedance_gui");
 
+    ros::NodeHandle nhpr("~");
+
+    int dT;
+    nhpr.param<int>("publish_freq", dT, 100);
+
+    int Kmax;
+    nhpr.param<int>("stiffness_max", Kmax, 300);
+
+    int Dmax;
+    nhpr.param<int>("damping_max", Dmax, 10);
+
     QApplication a(argc, argv);
     ContainerWidget::Ptr main_view =
-            std::make_shared<ContainerWidget>();
+            std::make_shared<ContainerWidget>(dT);
+
+    main_view->setMaxStiffness(Kmax);
+    main_view->setMaxDamping(Dmax);
+
+
 
     main_view->show();
     return a.exec();
