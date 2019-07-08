@@ -65,5 +65,6 @@
       <rviz plugin="${prefix}/sliders_rviz_panel_plugin_description.xml"/>
       <rqt_gui plugin="${prefix}/sliders_rqt_plugin_description.xml"/>
       <rqt_gui plugin="${prefix}/wrench_rqt_plugin_description.xml"/>
+      <rqt_gui plugin="${prefix}/cartesian_impedance_gui_rqt_plugin_description.xml"/>
   </export>
 </package>

@@ -1,0 +1,13 @@
+<library path="../../lib/libcartesian_impedance_gui_rqt">
+  <class name="cartesio_rqt/CartesianImpedanceWidgetRqt"
+         type="cartesio_rqt::CartesianImpedanceWidgetRqt"
+         base_class_type="rqt_gui_cpp::Plugin">
+    <description>
+        Cartesian Impedance sliders
+    </description>
+    <qtgui>
+        <label>Cartesian Impedance Sliders</label>
+        <icon type="theme">utilities-system-monitor</icon>
+    </qtgui>
+  </class>
+</library>

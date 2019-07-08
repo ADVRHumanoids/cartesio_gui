@@ -2,7 +2,7 @@
 #define _QTUTILS_H_
 
 #include <ros/ros.h>
-#include <QtUiTools/QtUiTools>
+#include <QtUiTools>
 #include <QWidget>
 #include <functional>
 #include <iostream>
