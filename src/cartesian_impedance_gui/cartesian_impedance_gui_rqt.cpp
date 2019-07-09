@@ -47,7 +47,7 @@ void CartesianImpedanceWidgetRqt::initPlugin(qt_gui_cpp::PluginContext& context)
     const double K_max = 1000.;
     const double D_max = 30.;
     
-    auto wrench_gui = new cartesio_gui::ContainerWidget(dT);
+    auto wrench_gui = new cartesio_gui::CartesianImpedanceWidget(dT);
     wrench_gui->setMaxStiffness(K_max);
     wrench_gui->setMaxDamping(D_max);
     widget_ = wrench_gui;

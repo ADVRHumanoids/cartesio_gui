@@ -126,6 +126,11 @@ namespace cartesio_gui
                 _msg = msg;
             }
 
+            QString getTopic()
+            {
+                return _topic;
+            }
+
         private:
 
             QWidget * LoadUiFile(QWidget * parent)
@@ -188,6 +193,10 @@ namespace cartesio_gui
             {
                 _topic = _topic_selector->itemText(i);
                 std::cout<<"Publish to: "<<_topic.toStdString()<<std::endl;
+
+                _send_reference = false;
+                _send_button->setText("Send");
+                std::cout<<"STOP sending references"<<std::endl;
             }
 
             QString _topic;

@@ -2,7 +2,7 @@
 
 using namespace cartesio_gui;
 
-ContainerWidget::ContainerWidget(const double dT, QWidget* parent_widget):
+CartesianImpedanceWidget::CartesianImpedanceWidget(const double dT, QWidget* parent_widget):
     QWidget (parent_widget)
 {
     /* Create GUI layout */
@@ -39,7 +39,7 @@ ContainerWidget::ContainerWidget(const double dT, QWidget* parent_widget):
         layout_tmp->addWidget(_stiffness_sliders[i].get());
 
     _reset_stiffness = new QPushButton("Reset", parent_widget);
-    connect(_reset_stiffness, &QPushButton::clicked, this, &ContainerWidget::on_reset_stiffness_clicked);
+    connect(_reset_stiffness, &QPushButton::clicked, this, &CartesianImpedanceWidget::on_reset_stiffness_clicked);
     layout_tmp->addWidget(_reset_stiffness);
 
     _damping_sliders.push_back(std::make_shared<BoxedSliderWidget>(this));
@@ -66,7 +66,7 @@ ContainerWidget::ContainerWidget(const double dT, QWidget* parent_widget):
         layout_tmp->addWidget(_damping_sliders[i].get());
 
     _reset_damping = new QPushButton("Reset", parent_widget);
-    connect(_reset_damping, &QPushButton::clicked, this, &ContainerWidget::on_reset_damping_clicked);
+    connect(_reset_damping, &QPushButton::clicked, this, &CartesianImpedanceWidget::on_reset_damping_clicked);
     layout_tmp->addWidget(_reset_damping);
 
 
@@ -74,16 +74,24 @@ ContainerWidget::ContainerWidget(const double dT, QWidget* parent_widget):
 
     _publisher_widget = std::make_shared<RosPublisherWidget<cartesian_interface::Impedance6> >(
                 dT, "cartesian_interface/Impedance6");
+    _actual_topic = "";
 
     layout_tmp->addWidget(_publisher_widget.get());
 
     _timer = new QTimer(this);
-    connect(_timer, &QTimer::timeout, this, &ContainerWidget::update);
+    connect(_timer, &QTimer::timeout, this, &CartesianImpedanceWidget::update);
     _timer->start(2*dT); //ms, data are updated from the slider to the message twice the publication rate
 }
 
-void ContainerWidget::update()
+void CartesianImpedanceWidget::update()
 {
+    if(_actual_topic != _publisher_widget->getTopic().toStdString())
+    {
+        _actual_topic = _publisher_widget->getTopic().toStdString();
+        initSliders(_actual_topic);
+    }
+
+
    for(unsigned int i = 0; i < 9; ++i)
    {
         msg.linear.stiffness[i] = 0.;
