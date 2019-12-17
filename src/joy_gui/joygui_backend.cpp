@@ -41,10 +41,11 @@ void JoyGuiBackEnd::construct()
     _active_task = "MyTask1";
 
     _ci = std::make_shared<XBot::Cartesian::RosImpl>();
+    _ci->set_async_mode(true);
 
-    auto tasks = ci()->getTaskList();
+    _task_list = ci()->getTaskList();
 
-    for(auto t : tasks)
+    for(auto t : _task_list)
     {
         auto sub = _nh.subscribe<geometry_msgs::TwistStamped>(t + "/velocity_reference",
                                                               1,
@@ -59,7 +60,7 @@ void JoyGuiBackEnd::construct()
                                                                      1,
                                                                      &JoyGuiBackEnd::on_joy_status_recv, this);
 
-    _active_task = QString::fromStdString(tasks[1]);
+    _active_task = QString::fromStdString(_task_list[1]);
 
 
 }
@@ -151,10 +152,9 @@ catch(std::exception& e)
 
 int JoyGuiBackEnd::activeTaskIndex() const try
 {
-    auto tasks = ci()->getTaskList();
-    auto it = std::find(tasks.begin(), tasks.end(), _active_task.toStdString());
+    auto it = std::find(_task_list.begin(), _task_list.end(), _active_task.toStdString());
 
-    return it - tasks.begin();
+    return it - _task_list.begin();
 }
 catch(std::exception& e)
 {

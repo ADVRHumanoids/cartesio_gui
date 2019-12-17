@@ -81,7 +81,7 @@ private:
     void on_twist_recv(const geometry_msgs::TwistStampedConstPtr& msg, std::string task_id);
     void on_joy_status_recv(const cartesian_interface::JoystickStatusConstPtr& msg);
 
-    mutable XBot::Cartesian::RosImpl::Ptr _ci;
+    mutable std::shared_ptr<XBot::Cartesian::RosImpl> _ci;
     ros::NodeHandle _nh;
 
     ros::Subscriber _status_sub;
@@ -90,6 +90,7 @@ private:
     Vector6i _enabled_axis;
     double _max_linear, _max_angular;
 
+    std::vector<std::string> _task_list;
     QString _active_task;
 
     ros::Time _twist_recv_stamp;
