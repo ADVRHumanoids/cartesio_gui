@@ -148,22 +148,23 @@ QVector3D Utils3D::getNormalizedScale(const QString &link_name)
 
 QMatrix4x4 Utils3D::getPose(const std::string &base_link, const std::string &distal_link)
 {
-    for(unsigned int i = 0; i < 10; ++i)
-    {
-        try{
-            ros::Time now = ros::Time::now();
-            _listener.waitForTransform(_tf_prefix+base_link,
-                                       _tf_prefix+distal_link,
-                                       ros::Time(0),ros::Duration(1.0));
+    _transform.setIdentity();
 
-            _listener.lookupTransform(_tf_prefix+base_link,
-                                      _tf_prefix+distal_link,
-                                      ros::Time(0), _transform);
-        }
-        catch (tf::TransformException ex){
-            ROS_ERROR("%s",ex.what());
-            ros::Duration(1.0).sleep();
-        }
+    try
+    {
+        ros::Time now = ros::Time::now();
+        _listener.waitForTransform(_tf_prefix+base_link,
+                                   _tf_prefix+distal_link,
+                                   ros::Time(0),ros::Duration(1.0));
+
+        _listener.lookupTransform(_tf_prefix+base_link,
+                                  _tf_prefix+distal_link,
+                                  ros::Time(0), _transform);
+    }
+    catch (tf::TransformException ex)
+    {
+        ROS_ERROR("%s",ex.what());
+        ros::Duration(1.0).sleep();
     }
 
     QMatrix4x4 transform_QT = fromTransformToQMatrix4x4(_transform);

@@ -78,6 +78,48 @@ JoyGuiBackEnd
         send_service = true
     }
 
+    function updateCiData()
+    {
+        send_service = false
+
+        /* Update control mode */
+        var ctrl = backend.getControlMode(backend.activeTask)
+
+        if(ctrl === JoyGuiBackEnd.ControlMode.Velocity)
+        {
+            lowerPanel.swipeView.currentItem.taskSwitch.checked = true
+        }
+        else
+        {
+            lowerPanel.swipeView.currentItem.taskSwitch.checked = false
+        }
+
+        /* Update reference frame */
+        var ref_frame = backend.getRefFrame()
+
+        if(ref_frame === "")
+        {
+            lowerPanel.swipeView.currentItem.radioButtonGlobal.checked = true
+            upperPanel.viewer3d.setBaseFrame("global")
+        }
+        else if(ref_frame === "base_link")
+        {
+            lowerPanel.swipeView.currentItem.radioButtonBaseLink.checked = true
+            upperPanel.viewer3d.setBaseFrame("base_link")
+        }
+        else if(ref_frame === backend.activeTask)
+        {
+            lowerPanel.swipeView.currentItem.radioButtonLocal.checked = true
+            upperPanel.viewer3d.setBaseFrame("local")
+        }
+        else
+        {
+            print("Error: reference frame not valid -> " + ref_frame)
+        }
+
+        send_service = true
+    }
+
     Component.onCompleted:
     {
 
@@ -94,5 +136,5 @@ JoyGuiBackEnd
     }
 
 
-
 }
+

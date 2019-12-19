@@ -17,6 +17,21 @@ ApplicationWindow {
         id: backend
     }
 
+    /* Timer to update data from CI */
+    Timer
+    {
+        interval: 16
+        running: true
+        repeat: true
+
+        onTriggered:
+        {
+            backend.updateCiData()
+        }
+    }
+
+
+
     /* Main layout */
     ColumnLayout {
 
